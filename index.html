@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="description" content="downloadmp3" />
+		<title>downloadMP3</title>
+		<link rel="stylesheet" href="css/global.css" />
+		<script src="assets/jquery.js"></script>
+		<script src="assets/ui.jquery.js"></script>
+		<script src="assets/jquery.ui.widget.js"></script>
+		<script src="assets/jquery.iframe-transport.js"></script>
+		<script src="assets/jquery.fileupload.js"></script>
+
+		<script>
+			var submitLater;
+			$(function() { //input functionality
+				var typedIn = false;
+				$("#file_url").click(function () {
+					if (typedIn === false) {
+						$(this).val("").addClass("typedIn");
+						typedIn = true;
+					}
+				});
+
+				$("#file_upload_button").fileupload({
+       				dataType: 'json',
+       				url: 'uploads/',
+       				limitMultiFileUploads: 1,
+        			done: function (e, data) {
+            			$.each(data.result, function (index, file) {
+                			$('<p/>').text(file.name).appendTo(document.body);
+            			});
+					},
+					change: function (e, data) {
+						var fileName = data.files[0].fileName;
+						$("#file_upload").val(fileName).addClass("typedIn");
+  					},
+ 					add: function (e, data) {
+     					submitLater = data;
+     					//submitLater.submit();
+					},
+					progress: function (e, data) {
+						console.log(parseInt(data.loaded / data.total * 100, 10));
+					}
+
+				});
+			});
+			$(function() { //drop down functionality
+				var selection = "Download";
+				var open = false;
+				var closeDropDown = function () {
+					open = false;
+					$("#file_format_options").hide("blind", { direction: "vertical" }, 400);
+				};
+				$("#file_format, #file_format_button").click(function () {
+					if (open === false) {
+						open = true;
+						$("#file_format_options").show("blind", { direction: "vertical" }, 400);
+					} else if (open === true) {
+						closeDropDown();
+					}
+				});
+				$(".option").click(function () {
+					$("#file_format_options .active").removeClass("active");
+					$(this).addClass("active");
+					var text = $(this).text();
+					$("#file_format").text(text);
+					selection = text;
+					closeDropDown();
+				});
+				$(document).click(function(e) {
+					if (open === true) {
+						var ele = $(e.target).attr("id");
+						var eleClass = $(e.target).attr("class");
+						if (ele !== "file_format" && ele !== "file_format_button" && eleClass !== "option") {
+							closeDropDown();
+						} 
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="top_bar_contain">
+			<div class="inner" id="top_bar"></div>
+		</div>
+		<div class="top_bar_contain_divider"></div>
+		<div id="content_body_contain">
+			<div id="content_body">
+				<div class="inner" id="logo_menu">
+					<a href="#" id="logo">downloadMP3</a>
+					<div id="menu">
+						<a href="#">about</a><span class="menu_slashes">//</span><a href="#">faq</a><span class="menu_slashes">//</span><a href="#">support</a><span class="menu_slashes">//</span><a href="#">terms of service</a><span class="menu_slashes">//</span><a href="#">blog</a>
+					</div>
+				</div>
+				<div class="other_contain_divider"></div>
+				<div id="step1">
+					<div class="inner" id="step1_inner">
+						<div id="step1_left">
+							<h2>Choose A File To Convert</h2>
+							<input type="text" id="file_url" name="file_url" value="http://www.url-to-convert.com" />
+							<p>You can use Youtube, Vimeo, DailyMotion, Google Video, Metacafe, Vimeo, Myspace, or a direct link to any video.</p>
+						</div>
+						<div id="step1_right">
+							<h2>Upload Your Own File</h2>
+							<div id="input_holder">
+								<input type="text" disabled="disabled" id="file_upload" name="file_upload" value="video.mp4" />
+								<input type="file" id="file_upload_button" name="files[]" value="" />
+								<img id="file_upload_image" src="images/upload_button.png" alt="" />
+							</div>
+							<p>Select a file to convert.</p>
+						</div>
+					</div>
+				</div>
+				<div id="step1_close"></div>
+				<div class="inner" id="step2">
+					<div id="step2_whole">
+						<h2>Choose Conversion Format</h2>
+						<div id="file_format">Download</div>
+						<a id="file_format_button" href="#">Choose Format</a>
+						<div id="file_format_options">
+							<div class="optionSet">
+								<a href="#" class="option active">Download</a>
+								<a href="#" class="option odd">MP3</a>
+							</div>
+							<div class="optionSet">
+	 							<a href="#" class="option">AAC</a>
+	 							<a href="#" class="option odd">WMA</a>
+	 						</div>
+							<div class="optionSet">
+		 						<a href="#" class="option">M4A</a>
+		 						<a href="#" class="option odd">OGG</a>
+		 					</div>
+							<div class="optionSet">
+		 						<a href="#" class="option">MP4</a>
+		 						<a href="#" class="option odd">3GP</a>
+		 					</div>
+							<div class="optionSet">
+		 						<a href="#" class="option">AVI</a>
+		 						<a href="#" class="option odd">MPG</a>
+		 					</div>
+							<div class="optionSet last">
+		 						<a href="#" class="option">WMV</a>
+		 						<a href="#" class="option odd">FLV</a>
+		 					</div>
+						</div>
+						<p>Select your desired format. If you just want to download the file, select Download.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="other_contain_divider"></div>
+		<div id="footer_contain">
+			<div class="inner" id="footer">
+				<p><a href="#">home</a><span class="menu_slashes">|</span><a href="#">about</a><span class="menu_slashes">|</span><a href="#">faq</a><span class="menu_slashes">|</span><a href="#">support</a><span class="menu_slashes">|</span><a href="#">terms of service</a><span class="menu_slashes">|</span><a href="#">blog</a><span class="footer_copy">&copy; 2012 downloadMP3 | design by <a class="infinitry" href="http://infinitry.net">infinitry</a></span></p>
+			</div>
+		</div>
+	</body>
+</html>

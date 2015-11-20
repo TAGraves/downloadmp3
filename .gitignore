@@ -17,6 +17,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Password File
+includes/connect.php
+
 # =========================
 # Operating System Files
 # =========================
